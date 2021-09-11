@@ -1,0 +1,93 @@
+openapi: "3.0.2"
+info:
+  title: command line snippets
+  description: >
+    In essence it’ll become a command-line repository that you can query should the need arise.
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: "1.0.0"
+servers:
+  - url: https://api.server.test/v1
+paths:
+  /api/v1/commands:
+    get:
+      summary: get commands
+      description: Read all command resources
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Command"
+    post:
+      summary: create new command
+      description: Create new command resource
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Command"
+      responses:
+        201:
+          description: Success
+  /api/v1/commands/{id}:
+    get:
+      summary: get single command
+      parameters:
+        - name: id
+          in: path
+          description: command identifier
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Command"
+        404:
+          description: Not found
+    put:
+      summary: update single command
+      parameters:
+        - name: id
+          in: path
+          description: command identifier
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Command"
+      responses:
+        200:
+          description: OK
+components:
+  schemas:
+    Command:
+      title: Command
+      type: object
+      properties:
+        howto:
+          type: string
+          description: >
+            Description of what the prompt will do,
+            for example, add a firewall exception, run unit tests, etc.
+        platform:
+          type: string
+          description: >
+            Application or platform domain,
+            for example, Ubuntu Linux, Dot Net Core, etc.
+        commandline:
+          type: string
+          description: >
+            The actual command line snippet,
+            for example, dotnet build.
