@@ -1,4 +1,8 @@
-﻿Imports Microsoft.AspNetCore.Mvc
+﻿Imports CommandAPI.Data
+Imports CommandAPI.Helpers
+Imports CommandAPI.Models
+Imports Microsoft.AspNetCore.Mvc
+Imports [Optional]
 
 Namespace CommandAPI.Controllers
 
@@ -8,15 +12,26 @@ Namespace CommandAPI.Controllers
     Public Class CommandsController
         Inherits ControllerBase
 
-        <HttpGet()>
-        Public Function [Get]() As ActionResult(Of IEnumerable(Of String))
+        Private ReadOnly _commandsRepository As ICommandsRepository
 
-            Return I(New String() { "This", "is", "Hard", "Coded" }.AsEnumerable())
+        Public Sub New(commandsRepository As ICommandsRepository)
+            _commandsRepository = commandsRepository
+        End Sub
+
+        <HttpGet()>
+        Public Function [Get]() As ActionResult(Of IEnumerable(Of Command))
+
+            Return Ok(_commandsRepository.GetAllCommands())
         End Function
 
-    
-        Private Function I(Of T)(value As T) As ActionResult(Of T)
-            Return New ActionResult(Of T)(value)
+        <HttpGet("{id}")>
+        Public Function [Get](id As Integer) As ActionResult(Of Command)
+            Dim command As [Option](Of Command) = _commandsRepository.GetCommandById(id)
+            Return _
+                command.Match(Of ActionResult(Of Command))(
+                    some := AddressOf Ok,
+                    none := AddressOf NotFound
+                )
         End Function
     End Class
 
