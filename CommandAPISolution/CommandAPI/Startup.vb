@@ -1,4 +1,6 @@
-﻿Imports Microsoft.AspNetCore.Builder
+﻿Imports CommandAPI.Data
+Imports CommandAPI.Data.Impl
+Imports Microsoft.AspNetCore.Builder
 Imports Microsoft.AspNetCore.Hosting
 Imports Microsoft.AspNetCore.Http
 Imports Microsoft.AspNetCore.Mvc
@@ -13,6 +15,8 @@ Namespace CommandAPI
         Public Sub ConfigureServices(services As IServiceCollection)
             services.AddApiVersioning(AddressOf ApiVersionOptions)
             services.AddControllers()
+
+            services.AddScoped(Of ICommandsRepository, MockCommandRepository)()
         End Sub
 
         ' This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

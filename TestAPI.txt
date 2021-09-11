@@ -1,1 +1,5 @@
 GET http://localhost:55742/api/v1/commands HTTP/1.1
+
+###
+
+GET http://localhost:55742/api/v1/commands/0 HTTP/1.1
